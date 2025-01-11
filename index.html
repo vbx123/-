@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تهنئة رمضان</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>أهلاً بك في صفحة تهنئة رمضان</h1>
+        <form id="userForm">
+            <label for="userName">اكتب اسمك:</label>
+            <input type="text" id="userName" name="userName" required>
+
+            <label for="category">اختر الفئة:</label>
+            <select id="category" name="category" required>
+                <option value="family">عائلتي</option>
+                <option value="parents">أمي وأبي</option>
+                <option value="siblings">الإخوة</option>
+                <option value="friends">الأصحاب</option>
+                <option value="children">الأولاد</option>
+            </select>
+
+            <label for="friends">اكتب أسماء الأصدقاء أو العائلة (افصل بين الأسماء بفاصلة):</label>
+            <textarea id="friends" name="friends" placeholder="محمد، أحمد، ليلى"></textarea>
+
+            <button type="submit">إرسال</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+

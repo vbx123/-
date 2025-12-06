@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>الصفحة الرئيسية</title>
+
+<style>
+  :root {
+    --bg: #000033;
+    --card-bg: rgba(10, 20, 60, 0.55);
+    --glow1: rgba(0,200,255,0.22);
+    --glow2: rgba(140,80,255,0.18);
+  }
+
+  * { box-sizing: border-box; margin:0; padding:0; }
+
+  body {
+    background: var(--bg);
+    font-family: "Tajawal", sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 30px 16px;
+  }
+
+  /* حاوية المحتوى في منتصف الشاشة */
+  .wrapper {
+    width: 100%;
+    max-width: 420px; /* مناسب للموبايل – يمنع السحب يمين/يسار */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px; /* مسافة بين البطاقات */
+  }
+
+  .card {
+    width: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(8px);
+
+    transition: transform .4s cubic-bezier(.2,1,.3,1),
+                box-shadow .4s,
+                filter .4s;
+  }
+
+  /* تأثير الضغط (Tap) الاحترافي */
+  .card:active {
+    transform: scale(.96);
+    filter: brightness(1.12);
+    box-shadow: 0 0 30px var(--glow1);
+  }
+
+  .img-wrap {
+    width: 100%;
+    height: 250px; /* أصغر قليلاً */
+    overflow: hidden;
+  }
+
+  .img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .45s ease;
+  }
+
+  .card:hover img {
+    transform: scale(1.08);
+  }
+
+  .title {
+    text-align: center;
+    color: #e6f7ff;
+    font-size: 18px;
+    padding: 14px 0 16px;
+    font-weight: 800;
+    letter-spacing: .7px;
+    text-shadow: 0 0 10px rgba(0,150,255,0.25);
+  }
+
+  a { color: inherit; text-decoration: none; width: 100%; }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <a href="go:vidoe1">
+    <div class="card">
+      <div class="img-wrap">
+      <img src="image1.png" alt="">
+      </div>
+      <div class="title">طريقة انشاء الصور</div>
+    </div>
+  </a>
+
+  <a href="go:Prommet1">
+    <div class="card">
+      <div class="img-wrap">
+        <img src="image2.png" alt="">
+      </div>
+      <div class="title">اختر البرومت</div>
+    </div>
+  </a>
+
+  <a href="go:Gemini1">
+    <div class="card">
+      <div class="img-wrap">
+        <img src="image3.png" alt="">
+      </div>
+      <div class="title">انشاء الصور</div>
+    </div>
+  </a>
+
+</div>
+
+</body>
+</html>

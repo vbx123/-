@@ -10,7 +10,6 @@
     --bg: #000033;
     --card-bg: rgba(10, 20, 60, 0.55);
     --glow1: rgba(0,200,255,0.22);
-    --glow2: rgba(140,80,255,0.18);
   }
 
   * { box-sizing: border-box; margin:0; padding:0; }
@@ -23,14 +22,13 @@
     padding: 30px 16px;
   }
 
-  /* حاوية المحتوى في منتصف الشاشة */
   .wrapper {
     width: 100%;
-    max-width: 420px; /* مناسب للموبايل – يمنع السحب يمين/يسار */
+    max-width: 420px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 26px; /* مسافة بين البطاقات */
+    gap: 26px;
   }
 
   .card {
@@ -39,24 +37,27 @@
     overflow: hidden;
     position: relative;
     background: var(--card-bg);
-    border: 1px solid rgba(255,255,255,0.06);
-    backdrop-filter: blur(8px);
 
-    transition: transform .4s cubic-bezier(.2,1,.3,1),
-                box-shadow .4s,
-                filter .4s;
+    /* إزالة الحدود + شادو نظيف */
+    border: none;
+    box-shadow: 0 0 18px rgba(255,255,255,0.04);
+
+    /* أسرع + أخف */
+    backdrop-filter: blur(3px);
+    transition: transform .25s ease,
+                box-shadow .25s ease,
+                filter .25s ease;
   }
 
-  /* تأثير الضغط (Tap) الاحترافي */
   .card:active {
-    transform: scale(.96);
+    transform: scale(.97);
     filter: brightness(1.12);
-    box-shadow: 0 0 30px var(--glow1);
+    box-shadow: 0 0 25px var(--glow1);
   }
 
   .img-wrap {
     width: 100%;
-    height: 250px; /* أصغر قليلاً */
+    height: 250px;
     overflow: hidden;
   }
 
@@ -64,11 +65,11 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform .45s ease;
+    transition: transform .25s ease;
   }
 
   .card:hover img {
-    transform: scale(1.08);
+    transform: scale(1.05);
   }
 
   .title {
@@ -78,11 +79,12 @@
     padding: 14px 0 16px;
     font-weight: 800;
     letter-spacing: .7px;
-    text-shadow: 0 0 10px rgba(0,150,255,0.25);
+    text-shadow: 0 0 7px rgba(0,150,255,0.2);
   }
 
   a { color: inherit; text-decoration: none; width: 100%; }
 </style>
+
 </head>
 
 <body>

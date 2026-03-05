@@ -3,176 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محرر النصوص الاحترافي</title>
+    <title>محرر النصوص الذكي</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --bg-color: #f4f7f6;
-            --toolbar-bg: #ffffff;
-            --accent-color: #3498db;
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #e9ecef;
+            --paper: #ffffff;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg);
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh;
         }
 
-        /* شريط الأدوات */
-        .toolbar {
+        /* شريط الأدوات العلوي */
+        .header-tool {
             width: 100%;
-            background: var(--toolbar-bg);
-            padding: 15px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
             display: flex;
-            gap: 15px;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            box-sizing: border-box;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
-        .tool-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-left: 1px solid #ddd;
-            padding-left: 15px;
+        .file-info input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 250px;
         }
 
-        .tool-group:last-child { border-left: none; }
-
-        button, select {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 5px;
+        .actions button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: 0.3s;
+            margin-right: 5px;
         }
 
-        button:hover { background: #f0f0f0; border-color: var(--accent-color); }
-
-        /* منطقة الكتابة */
-        .editor-container {
-            width: 90%;
-            max-width: 800px;
+        .toolbar {
+            width: 100%;
             background: white;
-            margin: 30px 0;
-            padding: 50px;
-            min-height: 1000px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            border-bottom: 1px solid #ccc;
+            flex-wrap: wrap;
+        }
+
+        /* منطقة الورقة */
+        .paper-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        #editor {
+            width: 210mm; /* عرض A4 */
+            min-height: 297mm;
+            background: var(--paper);
+            padding: 2cm;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
             outline: none;
             font-size: 18px;
             line-height: 1.6;
-            overflow-y: auto;
+            word-wrap: break-word;
         }
 
-        /* عداد الإحصائيات */
+        /* شريط الإحصائيات */
         .stats-bar {
             position: fixed;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary-color);
+            right: 20px;
+            background: rgba(44, 62, 80, 0.9);
             color: white;
-            padding: 10px 25px;
-            border-radius: 30px;
-            display: flex;
-            gap: 20px;
-            font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
         }
 
-        .stat-item span { font-weight: bold; color: #f1c40f; }
-
-        /* تخصيص الطباعة */
+        /* حل مشكلة الطباعة والـ PDF */
         @media print {
-            .toolbar, .stats-bar { display: none; }
-            .editor-container { box-shadow: none; margin: 0; width: 100%; }
+            body { background: white; }
+            .header-tool, .toolbar, .stats-bar, #fileInput { display: none !important; }
+            .paper-container { padding: 0; margin: 0; }
+            #editor {
+                box-shadow: none;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                min-height: auto;
+            }
+            /* إجبار المتصفح على تقسيم الصفحات بشكل صحيح */
+            p, div { page-break-inside: avoid; }
         }
+
+        button:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
 
-    <div class="toolbar">
-        <div class="tool-group">
-            <label>حجم الخط:</label>
-            <button onclick="changeFontSize('increase')">+</button>
-            <button onclick="changeFontSize('decrease')">-</button>
-            <span id="current-size">18px</span>
+    <div class="header-tool">
+        <div class="file-info">
+            <input type="text" id="fileName" value="مستند جديد" placeholder="اسم الملف...">
         </div>
-
-        <div class="tool-group">
-            <button onclick="execCmd('bold')"><b>B</b></button>
-            <button onclick="execCmd('italic')"><i>I</i></button>
-            <button onclick="execCmd('underline')"><u>U</u></button>
+        <div class="actions">
+            <input type="file" id="fileInput" hidden accept=".txt" onchange="importFile(event)">
+            <button onclick="document.getElementById('fileInput').click()">فتح ملف نصي</button>
+            <button onclick="saveAsTxt()" style="background: #27ae60;">حفظ كـ Text</button>
+            <button onclick="exportPDF()" style="background: #e74c3c;">تصدير PDF</button>
         </div>
-
-        <div class="tool-group">
-            <select onchange="execCmd('fontName', this.value)">
-                <option value="Arial">Arial</option>
-                <option value="Courier New">Courier New</option>
-                <option value="Times New Roman">Times New Roman</option>
-                <option value="Tahoma">Tahoma</option>
-            </select>
-        </div>
-
-        <button onclick="window.print()" style="background: var(--accent-color); color: white; border: none;">تحميل PDF / طباعة</button>
     </div>
 
-    <div class="editor-container" id="editor" contenteditable="true" oninput="updateStats()">
-        ابدأ الكتابة هنا...
+    <div class="toolbar">
+        <button onclick="execCmd('bold')"><b>B</b></button>
+        <button onclick="execCmd('italic')"><i>I</i></button>
+        <button onclick="changeFontSize('increase')">A+</button>
+        <button onclick="changeFontSize('decrease')">A-</button>
+        <select onchange="execCmd('fontName', this.value)">
+            <option value="Arial">Arial</option>
+            <option value="Tahoma">Tahoma</option>
+            <option value="Times New Roman">Times New Roman</option>
+        </select>
+    </div>
+
+    <div class="paper-container">
+        <div id="editor" contenteditable="true" oninput="updateStats()">
+            ابدأ بكتابة قصتك هنا...
+        </div>
     </div>
 
     <div class="stats-bar">
-        <div class="stat-item">الكلمات: <span id="word-count">0</span></div>
-        <div class="stat-item">الحروف: <span id="char-count">0</span></div>
-        <div class="stat-item">الصفحات التقريبية: <span id="page-count">0</span></div>
+        الكلمات: <span id="word-count">0</span> | 
+        الصفحات: <span id="page-count">1</span>
     </div>
 
     <script>
         const editor = document.getElementById('editor');
-        let currentFontSize = 18;
+        let fontSize = 18;
 
-        // تنفيذ أوامر التنسيق
-        function execCmd(command, value = null) {
-            document.execCommand(command, false, value);
+        function execCmd(cmd, val = null) {
+            document.execCommand(cmd, false, val);
         }
 
-        // تغيير حجم الخط
         function changeFontSize(type) {
-            if (type === 'increase') currentFontSize += 2;
-            else if (type === 'decrease' && currentFontSize > 10) currentFontSize -= 2;
-            
-            editor.style.fontSize = currentFontSize + 'px';
-            document.getElementById('current-size').innerText = currentFontSize + 'px';
+            fontSize = type === 'increase' ? fontSize + 2 : fontSize - 2;
+            editor.style.fontSize = fontSize + 'px';
         }
 
-        // تحديث الإحصائيات
         function updateStats() {
             const text = editor.innerText.trim();
-            
-            // عد الكلمات
             const words = text ? text.split(/\s+/).length : 0;
             document.getElementById('word-count').innerText = words;
-
-            // عد الحروف
-            document.getElementById('char-count').innerText = text.length;
-
-            // حساب الصفحات (بافتراض 300 كلمة لكل صفحة)
-            const pages = Math.ceil(words / 300);
+            
+            // حساب الصفحات بناءً على ارتفاع المحتوى الفعلي
+            const pages = Math.max(1, Math.ceil(editor.scrollHeight / 1122)); // 1122px هو ارتفاع A4 تقريباً
             document.getElementById('page-count').innerText = pages;
         }
 
-        // تهيئة العداد عند التشغيل
-        updateStats();
+        // حفظ كملف نصي .txt
+        function saveAsTxt() {
+            const text = editor.innerText;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const anchor = document.createElement('a');
+            anchor.download = document.getElementById('fileName').value + ".txt";
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.click();
+        }
+
+        // استيراد ملف نصي
+        function importFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    editor.innerText = e.target.result;
+                    document.getElementById('fileName').value = file.name.replace('.txt', '');
+                    updateStats();
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // تصدير PDF (باستخدام محرك الطباعة لضمان الجودة)
+        function exportPDF() {
+            const originalTitle = document.title;
+            document.title = document.getElementById('fileName').value;
+            window.print();
+            document.title = originalTitle;
+        }
+
+        // تنبيه بخصوص الـ PDF
+        console.log("نصيحة: لاستيراد PDF وتعديله، يفضل تحويله لـ Word ثم نسخه هنا، لأن المتصفحات لا تدعم تعديل الـ PDF مباشرة برمجياً.");
     </script>
 </body>
 </html>
